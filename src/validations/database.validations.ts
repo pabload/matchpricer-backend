@@ -7,7 +7,7 @@ export const isproductNeeded = async (id: String) => {
     ).countDocuments()
     if(number==0){
         await Product.deleteOne({ _id:id}).then(()=>{
-            console.log('product deleted from collection')
+            //console.log('product deleted from collection')
             return deletedFromDB=true;
         })
     }
