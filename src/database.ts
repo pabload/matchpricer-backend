@@ -11,10 +11,13 @@ mongoose.connect(config.DBCON,({
 }))
 .then(async (db)=>{
     console.log('database connected');
-    cron.schedule("* 5 * * *",async()=>{
+    /*cron.schedule("* 5 * * *",async()=>{
         console.log('Cheking new prices on websites.......')
         await scrapper.checkUptadePrices();
         console.log('all sites checked');
+    });*/
+    cron.schedule("* * * * *",async()=>{
+        console.log('probando......');
     });
 })
 .catch((error)=>console.log(error));

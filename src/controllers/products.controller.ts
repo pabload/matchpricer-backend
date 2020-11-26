@@ -115,7 +115,6 @@ export const gettrackedProducts = async (req: Request, res: Response) => {
                 actualprice: product.actualprice,
             });
         }
-        console.log(infoPfroducts);
         return res.status(200).json({ 
             status:'success',
             infoPfroducts 
@@ -163,7 +162,6 @@ export const updateTrackedInfoById = async (req: Request, res: Response) => {
         const { token, id, condition } = req.body
         const userInfoToken: any = Jwt.verify(token, config.SECRETTOKEN);
         const { productsontrack }: any = await User.findById(userInfoToken.id);
-        console.log(userInfoToken.id);
         const infoUpdated = await User.updateOne(
             {
                 _id: userInfoToken.id, productsontrack: {
