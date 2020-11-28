@@ -13,7 +13,7 @@ mongoose.connect(config.DBCON,({
     console.log('database connected');
     console.log(config.EMAIL);
     console.log(config.PASS);
-    cron.schedule("0 */4 * * *",async()=>{
+    cron.schedule("* * * * *",async()=>{
         console.log('Cheking new prices on websites.......')
         await scrapper.checkUptadePrices();
         console.log('all sites checked');
