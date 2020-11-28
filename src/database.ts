@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import * as scrapper from './scrapping/scrapping'
 import cron from 'node-cron'
 import config from './config'
+import * as sendgrid from './sendgrid/sendgrind'
 mongoose.connect(config.DBCON,({
     useNewUrlParser:true,
     useUnifiedTopology:true,
@@ -13,7 +14,7 @@ mongoose.connect(config.DBCON,({
     console.log('database connected');
     /*console.log(config.EMAIL);
     console.log(config.PASS);*/
-    cron.schedule("0 */4 * * *",async()=>{
+    cron.schedule("* * * * *",async()=>{
         console.log('Cheking new prices on websites.......')
         await scrapper.checkUptadePrices();
         console.log('all sites checked');

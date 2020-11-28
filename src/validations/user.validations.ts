@@ -1,6 +1,7 @@
 import User from '../models/users.model'
 import nodemailer from 'nodemailer'
-import * as mailer from '../nodemailer/nodemailer'
+//import * as mailer from '../nodemailer/nodemailer'
+import * as mailer from '../sendgrid/sendgrind'
 import config from '../config';
 export const UserNameFound = async (userName: String) => {
     const number = await User.find({ username: userName }).countDocuments();
@@ -56,7 +57,7 @@ export const updateTrackedProductMatch = async (userId: string, productId: strin
         },
         { "$set": { "productsontrack.$.match": true } },
         async (err, user) => {
-            mailer.sendEmail(productName,userEmail,urlProduct);
+            mailer.sendEmailMessage(productName,userEmail,urlProduct);
             console.log("user product matched the condition");
         });
 }
