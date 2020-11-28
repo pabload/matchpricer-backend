@@ -65,7 +65,7 @@ export const checkProductPrice = async (product: any) => {
             price = parseFloat($('.product-price').text().replace("$", "").replace(",", "")) //+ 1;
             break;
         case 'mercado-libre':
-            price = parseFloat($('.ui-pdp-price__second-line').find($('meta')).attr('content')) //-100//Math.floor(Math.random() * 10);
+            price = parseFloat($('.ui-pdp-price__second-line').find($('meta')).attr('content')) -100//Math.floor(Math.random() * 10);
             break;
         case 'ebay':
             price = parseFloat($('#vi-mskumap-none').find($('#prcIsum')).attr('content')) //+ 3;
