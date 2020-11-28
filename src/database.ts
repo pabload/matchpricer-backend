@@ -11,9 +11,9 @@ mongoose.connect(config.DBCON,({
 }))
 .then(async (db)=>{
     console.log('database connected');
-    console.log(config.EMAIL);
-    console.log(config.PASS);
-    cron.schedule("* * * * *",async()=>{
+    /*console.log(config.EMAIL);
+    console.log(config.PASS);*/
+    cron.schedule("0 */4 * * *",async()=>{
         console.log('Cheking new prices on websites.......')
         await scrapper.checkUptadePrices();
         console.log('all sites checked');
