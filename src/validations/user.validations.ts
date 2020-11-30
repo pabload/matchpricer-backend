@@ -21,7 +21,7 @@ export const produtTrackedUser = async (userId: String, productId: string) => {
     });
     return productFound;
 }
-export const productPriceMatch = async (productId: string, newPrice: number, oldPrice: number,productName:string,urlProduct:string) => {
+export const productPriceMatch = async (productId: string, newPrice: number,productName:string,urlProduct:string) => {
     const users:any = await User.find(
          { productsontrack: { $elemMatch: { productid: productId } } }
     )
@@ -32,7 +32,7 @@ export const productPriceMatch = async (productId: string, newPrice: number, old
                 const decodedNumber = parseFloat(condition.split(',')[1])
                 switch (decodedCondition) {
                     case "<":
-                        if (newPrice < oldPrice) {
+                        if (newPrice < decodedNumber) {
                             await updateTrackedProductMatch(user.id, productId,user.email,productName,urlProduct);
                         }
                         break;

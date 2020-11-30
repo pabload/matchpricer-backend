@@ -78,7 +78,7 @@ export const checkProductPrice = async (product: any) => {
             newOlderPrices.shift();
         }
         ///alert all users with product the change of price 
-        await userValidator.productPriceMatch(product.toObject()._id.toString(),price,product.toObject().actualprice,product.toObject().productname,product.toObject().mainurl);
+        await userValidator.productPriceMatch(product.toObject()._id.toString(),price,product.toObject().productname,product.toObject().mainurl);
         ///updates de price from DB
         await Product.findByIdAndUpdate(
             product.toObject()._id,
