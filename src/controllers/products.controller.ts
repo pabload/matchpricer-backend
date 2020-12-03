@@ -6,9 +6,9 @@ import * as userValidator from '../validations/user.validations'
 import * as dbValidator from '../validations/database.validations'
 import User from '../models/users.model'
 import config from '../config'
-export const searchProduct = async (req: any, res: Response)=>{
+export const searchProduct = async (req: any, res: Response) => {
     try {
-        const { url , type } = req.body;
+        const { url, type } = req.body;
         let result: any;
         switch (type) {
             case 'bestbuy':
@@ -21,8 +21,8 @@ export const searchProduct = async (req: any, res: Response)=>{
                 result = await scrapper.scrapNewProductEbay(url);
                 break;
         }
-        if(result.price !== NaN){
-            return res.status(200).json({ 
+        if (result.price !== NaN) {
+            return res.status(200).json({
                 message: 'Product found',
                 imgurl: result.imgurl,
                 productname: result.productname,
@@ -30,13 +30,13 @@ export const searchProduct = async (req: any, res: Response)=>{
             });
         }
         return res.status(401).json({
-            status:'error',
-            message:'error on URL'
+            status: 'error',
+            message: 'error on URL'
         })
     } catch (error) {
         res.status(401).json({
-            status:'error',
-            message:'error on URL'
+            status: 'error',
+            message: 'error on URL'
         })
     }
 }
@@ -73,9 +73,9 @@ export const trackProduct = async (req: any, res: Response) => {
                     { "productsontrack": { productid: newProduct.id, condition, match: false } }
             })
             return res.status(200).json({
-                status:'sucess',
+                status: 'sucess',
                 message: 'product tracked on your account'
-             });
+            });
         }
         if (await userValidator.produtTrackedUser(userInfoToken.id, existedProduct[0].id) == false) {
             await User.findByIdAndUpdate(userInfoToken.id, {
@@ -83,17 +83,17 @@ export const trackProduct = async (req: any, res: Response) => {
                     { "productsontrack": { productid: existedProduct[0].id, condition, match: false } }
             })
             return res.status(200).json({
-                status:'success',
+                status: 'success',
                 message: 'product tracked on your account'
             });
         }
         res.status(404).json({
-            status:'error',
+            status: 'error',
             message: 'product already tracked on your account'
         });
     } catch (error) {
         res.status(404).json({
-            status:'error',
+            status: 'error',
             message: 'error on server'
         });
     }
@@ -115,43 +115,43 @@ export const gettrackedProducts = async (req: Request, res: Response) => {
                 actualprice: product.actualprice,
             });
         }
-        return res.status(200).json({ 
-            status:'success',
-            infoPfroducts 
+        return res.status(200).json({
+            status: 'success',
+            infoPfroducts
         })
 
     } catch (error) {
         res.status(404).json({
-            status:'error',
+            status: 'error',
             message: 'error on server'
         });
     }
 }
 export const gettrackedProductById = async (req: Request, res: Response) => {
     try {
-        const { token ,id } = req.body
+        const { token, id } = req.body
         const userInfoToken: any = Jwt.verify(token, config.SECRETTOKEN);
         const { productsontrack }: any = await User.findById(userInfoToken.id);
-        const userInfo = productsontrack.filter((pro:any) => {
+        const userInfo = productsontrack.filter((pro: any) => {
             return pro.productid === id
         })
-        const product:any = await Product.findById(id);
+        const product: any = await Product.findById(id);
         const infoProduct = {
-            mainurl:product.mainurl,
-            productname:product.productname,
-            actualprice:product.actualprice,
-            imgurl:product.imgurl,
-            olderprices:product.olderprices,
-            condition:userInfo[0].condition,
-            match:userInfo[0].match,
+            mainurl: product.mainurl,
+            productname: product.productname,
+            actualprice: product.actualprice,
+            imgurl: product.imgurl,
+            olderprices: product.olderprices,
+            condition: userInfo[0].condition,
+            match: userInfo[0].match,
         }
         res.status(200).json({
-             status:'success',
-             infoproduct:infoProduct,
-            });
+            status: 'success',
+            infoproduct: infoProduct,
+        });
     } catch (error) {
         res.status(404).json({
-            status:'error',
+            status: 'error',
             message: 'error on server'
         });
     }
@@ -170,16 +170,21 @@ export const updateTrackedInfoById = async (req: Request, res: Response) => {
                     }
                 }
             },
-            { "$set": { "productsontrack.$.condition": condition } },
+            {
+                "$set": {
+                    "productsontrack.$.condition": condition,
+                    "productsontrack.$.match":false,
+                }
+            },
             (err, user) => {
-                if(err){
+                if (err) {
                     return res.status(404).json({
-                        status:'error',
+                        status: 'error',
                         message: err
                     });
                 }
                 res.status(200).json({
-                    status:'success',
+                    status: 'success',
                     message: 'info updated'
                 });
                 console.log(user);
@@ -198,13 +203,15 @@ export const deleteTrackedProductById = async (req: Request, res: Response) => {
             { _id: userInfoToken.id },
             { $pull: { productsontrack: { productid: id } } },
             (err, user) => {
-                if(err){return res.status(404).json({
-                    status:'error',
-                    message:"ERROR ON SERVER"
-                })}
+                if (err) {
+                    return res.status(404).json({
+                        status: 'error',
+                        message: "ERROR ON SERVER"
+                    })
+                }
                 dbValidator.isproductNeeded(id);
                 return res.status(200).json({
-                    status:'success',
+                    status: 'success',
                     message: 'product deleted'
                 });
             });
