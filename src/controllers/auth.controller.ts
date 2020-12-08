@@ -67,7 +67,7 @@ export const singIn = async (req: Request, res: Response) => {
 }
 export const getUserInfo = async (req: Request, res: Response) => {
     try {
-        const { token } = req.params;
+        const { token } = req.body;
         const userInfoToken: any = Jwt.verify(token, config.SECRETTOKEN);
         const { email, username }: any = await User.findById(userInfoToken.id);
         res.status(200).json({
@@ -87,6 +87,7 @@ export const getUserInfo = async (req: Request, res: Response) => {
 export const deleteAccount = async (req: Request, res: Response) => {
     try {
         const { token, pass } = req.body
+        console.log(pass);
         const userInfoToken: any = Jwt.verify(token, config.SECRETTOKEN);
         const { password }: any = await User.findById(userInfoToken.id);
         const samepasswords = await encryptValidator.comparePasswords(pass, password);
@@ -96,7 +97,7 @@ export const deleteAccount = async (req: Request, res: Response) => {
                 message: 'password is not correct'
             });
         }
-        const deleted = await User.findOneAndRemove(userInfoToken.id);
+        const deleted = await User.findByIdAndDelete(userInfoToken.id);
         res.status(200).json({
             status: 'success',
             message: 'account deleted'

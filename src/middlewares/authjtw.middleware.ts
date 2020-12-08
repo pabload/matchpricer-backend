@@ -5,6 +5,7 @@ import User from '../models/users.model'
 export const verifyToken = async (req: any, res: Response, next: NextFunction) => {
     try {
         const { token } = req.body;
+        console.log('token:'+token);
         if (!token) { return res.status(403).json({
              status:'error',
              message: 'Token not provided'
