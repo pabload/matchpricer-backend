@@ -44,6 +44,13 @@ export const trackProduct = async (req: any, res: Response) => {
     try {
         const { url, type, condition, token } = req.body;
         const userInfoToken: any = Jwt.verify(token, config.SECRETTOKEN);
+        const { productsontrack }: any = await User.findById(userInfoToken.id);
+        if(productsontrack.length+1==9){
+            return res.status(404).json({
+                status: 'error',
+                message: 'you can only track 8 products'
+            });
+        }
         const existedProduct: any = await Product.find({ mainurl: url });
         if (existedProduct.length === 0) {
             let result: any;
